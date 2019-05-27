@@ -51,8 +51,13 @@
                 return this.$route.path.replace('/','')
             }
         },
+        created() {
+            console.log(this.$route.path)
+        },
         mounted() {
-            console.log(this.$route.path.replace('/',''))
+        },
+        updated() {
+            console.log(this.$route.path)
         },
         methods: {
             handleOpen(key,keyPath) {
