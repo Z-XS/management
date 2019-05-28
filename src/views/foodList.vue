@@ -72,8 +72,8 @@
                 form:{},
                 arr: [],
                 index: 0,
-                pagesize: 2,
-                total: 0
+                pagesize: 5,
+                total: 1
             }
         },
         methods: {
@@ -94,6 +94,7 @@
                     })
                     this.tableData.splice(index,1)
                     this.getcount()
+                    console.log(this.total)
                 }
             },
             async updatefood() {

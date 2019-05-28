@@ -35,7 +35,7 @@
     align-items: center;
     padding-left: 20px;
     height: 60px;
-    background-color: aquamarine;
+    background: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet); 
 }
 .avator {
     width: 36px;

@@ -72,4 +72,7 @@
 
 <style lang="less" scoped>
 @import '../style/mixin.less';
+.el-submenu .el-menu-item {
+	min-width: 120px;
+	}
 </style>
