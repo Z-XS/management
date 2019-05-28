@@ -7,7 +7,7 @@ export default function ajax (type,url,data) {
             url:url,
             params:data
         })
-        .then(res => resolve(res.data))
+        .then(res => resolve(res))
         .catch(err => reject(err))
     })
 }

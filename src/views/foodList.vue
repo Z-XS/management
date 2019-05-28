@@ -26,7 +26,7 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination background :page-size="20" layout="total,prev,pager,next" :total="1000">
+                <el-pagination background @current-change="handleCurrentChange" :page-size="pagesize" layout="total,prev,pager,next" :total="total">
                 </el-pagination>
             </div>
             <el-dialog title="修改信息" :visible.sync="dialogFormVisible">
@@ -49,7 +49,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="updatefood">确 定</el-button>
+                    <el-button type="primary" @click="updatefood()">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -58,6 +58,8 @@
 
 <script>
     import headTop from '../components/headTop.vue'
+    import {getFoods,deleteFood,getCount} from "../utils/index.js"
+
     export default {
         components: {
             headTop
@@ -67,46 +69,67 @@
                 crumbData: ['数据管理','食品列表'],
                 tableData: [],
                 dialogFormVisible: false,
-                form:{
-                    name: '',
-                    shop: '',
-                    id: '',
-                    category: ''
-                },
-                arr: []
+                form:{},
+                arr: [],
+                index: 0,
+                pagesize: 2,
+                total: 0
             }
         },
         methods: {
             handleEdit(index,row) {
                 console.log(index,row)
+                this.index = index
                 this.dialogFormVisible = true
-                this.form = row
+                this.form = JSON.parse(JSON.stringify(row))
+                console.log(this.form)
             },
-            handleDelete(index,row) {
+            async handleDelete(index,row) {
+                const res = await getFoods('get','http://127.0.0.1:3002/delete',{deleteId:row._id})
                 console.log(index,row)
-                this.$message({
-                    type: 'success',
-                    message: '删除成功'
-                })
-                this.tableData.splice(index,1)
+                if(res.data == 'success') {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功'
+                    })
+                    this.tableData.splice(index,1)
+                    this.getcount()
+                }
             },
-            updatefood() {
+            async updatefood() {
+                const res = await getFoods('get','http://127.0.0.1:3002/update',{form: this.form})
+                if (res.data != 'success') return
+                this.tableData.splice(this.index,1,this.form)
                 this.dialogFormVisible = false
                 console.log(this.form)
+            },
+            async getData(val) {
+                const res = await getFoods('get','http://127.0.0.1:3002/foodpage',{pagesize:this.pagesize,page:val})
+                console.log(res.data)
+                this.tableData = res.data
+            },
+            async getcount() {
+                const res = await getCount('get','http://127.0.0.1:3002/getcount')
+                this.total = res.data
+            },
+            handleCurrentChange(val) {
+                this.getData(val)
             }
         },
         created() {
-            for (var i=1;i<20;i++) {
-                this.tableData.push({
-                    id: '12987126',
-                    name: '好滋好味鸡蛋仔',
-                    category: '江浙小吃、小吃零食',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    address: '上海市普陀区真北路',
-                    shop: '王小虎夫妻店',
-                    shopId: '10333'
-                })
-            }
+            this.getData(1)
+            this.getcount()
+            // for (var i=1;i<20;i++) {
+            //     this.tableData.push({
+            //         id: '12987126',
+            //         name: '好滋好味鸡蛋仔',
+            //         category: '江浙小吃、小吃零食',
+            //         desc: '荷兰优质淡奶，奶香浓而不腻',
+            //         address: '上海市普陀区真北路',
+            //         shop: '王小虎夫妻店',
+            //         shopId: '10333'
+            //     })
+            // }
         },
     }
 </script>
