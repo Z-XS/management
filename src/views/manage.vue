@@ -1,7 +1,7 @@
 <template>
     <div class="manage_page fillcontain">
         <el-row style="height: 100%">
-            <el-col :span='4' style="height: 100%; background: #82e9cf">
+            <el-col :span='4' style="height: 100%; background: #90b8ec">
                 <el-menu @open="handleOpen" @close="handleClose" router :default-active="defaultActive" background-color="#000" text-color="#fff" active-text-color="#ffd04b">
                     <el-menu-item index="manage"><i class="el-icon-menu"></i><span slot="title">首页</span></el-menu-item>
                     <el-submenu index='2'>
@@ -36,9 +36,10 @@
                 </el-menu>
             </el-col>
             <el-col :span='20' style="height: 100%; overflow:auto">
-                <keep-alive>
+                <!-- <keep-alive>
                     <router-view></router-view>
-                </keep-alive>
+                </keep-alive> -->
+                <router-view></router-view>
             </el-col>
         </el-row>
     </div>
