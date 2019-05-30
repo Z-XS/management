@@ -25,6 +25,9 @@
 </template>
 
 <script>
+    import {setCookie,getCookie} from "../utils/cookie.js"
+    import {postCookie} from "../utils/index.js"
+    import axios from 'axios'
 export default {
     data() {
         return {
@@ -47,7 +50,10 @@ export default {
         submitForm: function(formName) {
             this.$refs['loginForm1'].validate((valid) => {
                 if(valid) {
-                    this.$router.push('/manage')
+                    console.log(valid)
+                    this.pCookie()
+                    setCookie(this.loginForm.username,this.loginForm.password,7)
+                    // this.$router.push('/manage')
                 }else {
                     return false
                 }
@@ -55,10 +61,16 @@ export default {
         },
         submit() {
             console.log(32132)
+        },
+        async pCookie() {
+            const bool = await postCookie('post','http://127.0.0.1:3002/cookie',{username:this.loginForm.username,password:this.loginForm.password})
+            console.log(bool)
         }
     },
     mounted() {
         this.show = true
+        // var a = getCookie('admin')
+        // console.log(a)
     },
 }
 </script>
