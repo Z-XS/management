@@ -52,7 +52,8 @@ export default {
                 if(valid) {
                     console.log(valid)
                     this.pCookie()
-                    setCookie(this.loginForm.username,this.loginForm.password,7)
+                    setCookie('username',this.loginForm.username,7)
+                    setCookie('password',this.loginForm.password,7)
                     // this.$router.push('/manage')
                 }else {
                     return false
@@ -65,12 +66,24 @@ export default {
         async pCookie() {
             const bool = await postCookie('post','http://127.0.0.1:3002/cookie',{username:this.loginForm.username,password:this.loginForm.password})
             console.log(bool)
+        },
+        async loginCookie(a,b) {
+            const logboolen = await postCookie('post','http://127.0.0.1:3002/cookieLogin',{username:a,password:b})
+            // console.log(logboolen)
+            if (logboolen.data == 'yes') {
+                console.log('success')
+                this.$router.push('/manage')
+            }
         }
     },
     mounted() {
         this.show = true
-        // var a = getCookie('admin')
-        // console.log(a)
+        let a = getCookie('username')
+        if(a != undefined) {
+            // console.log(a)
+        let b = getCookie('password')
+        this.loginCookie(a,b)
+        }
     },
 }
 </script>

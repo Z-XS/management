@@ -1,6 +1,8 @@
 <template>
   <div id="app" class="fillcontain">
+  <keep-alive>
     <router-view/>
+  </keep-alive>
   </div>
 </template>
 
