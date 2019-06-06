@@ -27,7 +27,7 @@
 <script>
     import {setCookie,getCookie} from "../utils/cookie.js"
     import {postCookie} from "../utils/index.js"
-    import axios from 'axios'
+    import {mapState,mapActions} from 'vuex'
 export default {
     data() {
         return {
@@ -46,14 +46,19 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapState(['adminInfo'])
+    },
     methods: {
+        ...mapActions(['getadminInfo','setadminInfo']),
         submitForm: function(formName) {
             this.$refs['loginForm1'].validate((valid) => {
                 if(valid) {
-                    console.log(valid)
+                    // console.log(valid)
                     this.pCookie()
-                    setCookie('username',this.loginForm.username,7)
-                    setCookie('password',this.loginForm.password,7)
+                    // setCookie('username',this.loginForm.username,7)
+                    // setCookie('password',this.loginForm.password,7)
+                    // setCookie('ID',this.loginForm.username + ':' + this.loginForm.password , 7)
                     // this.$router.push('/manage')
                 }else {
                     return false
@@ -64,8 +69,15 @@ export default {
             console.log(32132)
         },
         async pCookie() {
-            const bool = await postCookie('post','http://127.0.0.1:3002/cookie',{username:this.loginForm.username,password:this.loginForm.password})
+            const cook = escape(this.loginForm.username + ':' + this.loginForm.password)
+            const bool = await postCookie('post','http://127.0.0.1:3002/login',{username:this.loginForm.username,password:this.loginForm.password,cookie:cook})
             console.log(bool)
+            if(bool.data) {
+                this.setadminInfo(this.loginForm.username)
+                setCookie('ID',this.loginForm.username + ':' + this.loginForm.password ,7)
+                this.$router.push('/manage')
+                this.loginForm = {}
+            }
         },
         async loginCookie(a,b) {
             const logboolen = await postCookie('post','http://127.0.0.1:3002/cookieLogin',{username:a,password:b})
@@ -76,15 +88,34 @@ export default {
             }
         }
     },
+    created() {
+        if(!this.adminInfo) {
+            this.getadminInfo()
+        }   
+    },
     mounted() {
         this.show = true
-        let a = getCookie('username')
-        if(a != undefined) {
-            // console.log(a)
-        let b = getCookie('password')
-        this.loginCookie(a,b)
-        }
+        // let a = getCookie('username')
+        // if(a != undefined) {
+        //     // console.log(a)
+        // let b = getCookie('password')
+        // this.loginCookie(a,b)
+        // }
+
+        // console.log(unescape('admin%3A654789'))
     },
+    watch: {
+        adminInfo: function(value) {
+            if(value) {
+                console.log('yidenglu')
+                this.$message({
+                    type: 'success',
+                    message: '登陆成功'
+                })
+                this.$router.push('/manage')
+            }
+        }
+    }
 }
 </script>
   
