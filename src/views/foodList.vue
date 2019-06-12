@@ -44,6 +44,8 @@
                         <el-select v-model="form.category" placeholder="请选择">
                             <el-option label="一" value="小吃"></el-option>
                             <el-option label="二" value="零食"></el-option>
+                            <el-option label="三" value="便当"></el-option>
+                            <el-option label="四" value="面条"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>

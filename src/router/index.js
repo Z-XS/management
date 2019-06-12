@@ -37,6 +37,10 @@ const router =  new Router({
         {
           path: '/addShop',
           component: () => import('@/views/addShop')
+        },
+        {
+          path: '/vmap',
+          component: () => import('@/views/vmap')
         }
       ]
     }
